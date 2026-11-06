@@ -16,7 +16,12 @@
 
 ## Work Guidance
 
+- `asyncio_mode = "auto"` (pyproject): async tests need no decorator.
+- Settings tests `monkeypatch.chdir(tmp_path)` and set env vars via `monkeypatch`, so a local `.env` never leaks in.
+
 ## Verification
+
+- `uv run pytest`
 
 ## Child DOX Index
 

@@ -42,7 +42,7 @@ aiosqlite (SQLite).
 
 ```bash
 uv sync
-cp .env.example .env        # put BOT_TOKEN from @BotFather here
+cp .env.example .env        # set BOT_TOKEN (from @BotFather) and ALLOWED_USER_IDS
 uv run python -m energy_bot.main
 uv run pytest               # tests
 ```

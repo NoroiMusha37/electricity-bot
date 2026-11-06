@@ -1,5 +1,25 @@
 [project]
 name = "energy-bot"
 version = "0.1.0"
+description = "Telegram bot notifying about Lvivoblenergo power outages"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "aiogram>=3.31.0",
+    "aiosqlite>=0.22.1",
+    "httpx>=0.28.1",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.16.2",
+    "tzdata>=2026.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.4.1.post1",
+    "respx>=0.23.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

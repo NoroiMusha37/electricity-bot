@@ -9,6 +9,7 @@ add short description of acquired knowledge here in bulleted list:
 - After work is done in worktrees - merge worktree branch into main locally (`git merge`); do NOT push worktree branches to remote; Delete worktree after successful merge;
 - If needed DTO model - create pydantic schema in separate schemas.py file related to working module
 - Never add anything to `__init__.py`. Use full-path imports.
+- `Settings` fields in `energy_bot/config.py` are UPPERCASE (`BOT_TOKEN`, `ALLOWED_USER_IDS`, ...), including the `TZ` property.
 - Git: never push. Commit messages are one line `[verb] the rest` (e.g. `[init] the project`): no body, no co-author/tool attribution. Never commit on your own: stop at each milestone, present the changes and the proposed message, and commit only after the user approves both.
 - Project: Telegram bot (aiogram 3, long polling) notifying about Lvivoblenergo (LOE) outages. Package manager is `uv`; timezone for all schedule logic is `Europe/Kyiv`. Target hosting is an Oracle Cloud Always Free VM. The LOE APIs are reachable from non-UA IPs (verified 2026-11-06 via a US-hosted fetch), so there's no geo-block.
 - Do research and feasibility checks (API access, geo-blocking, etc.) during planning, before implementation. Don't put developer to-dos or pre-checks in README: README describes the project for its users.

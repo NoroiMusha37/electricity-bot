@@ -7,8 +7,10 @@
 ## Ownership
 
 - `main.py`: entry point (`python -m energy_bot.main`). Builds the Bot and Dispatcher, initialises the DB, starts the monitor tasks, runs long polling.
-- `config.py`: `Settings` (pydantic-settings, read from `.env`): `BOT_TOKEN`, `DB_PATH`, poll intervals, timezone.
-- `bot/`: Telegram layer: command handlers, the address-entry FSM (`states.py`), inline keyboards.
+- `config.py`: `Settings` (pydantic-settings, read from `.env`; template in `/.env.example`): `BOT_TOKEN`, `ALLOWED_USER_IDS`, `DB_PATH`, timezone, poll intervals, warning offsets and catch-up window, default quiet hours, log level. List settings accept `1,2` or `[1, 2]`.
+- `schedule/`: pure outage-timeline logic (merging intervals across midnight, due warnings, diffs, quiet hours). No IO.
+- `render/`: schedule PNG rendering (Pillow, bundled Inter fonts); look defined by `docs/schedule_image_mockup.png`.
+- `bot/`: Telegram layer: command handlers, the address-entry FSM (`states.py`), inline keyboards, allow-list middleware, Ukrainian texts.
 - `storage/`: SQLite persistence (`db.py`) and its DTOs (`schemas.py`).
 - `monitor/`: background asyncio loops: `schedule_watcher.py` (schedule diffs), `warnings.py` (60/30-min warnings), `accident_watcher.py` (emergency start/end), `notifier.py` (safe message sending).
 - Child-owned: `loe/` (see its AGENTS.md).
