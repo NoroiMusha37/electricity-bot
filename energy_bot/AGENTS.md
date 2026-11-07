@@ -11,7 +11,13 @@
 - `schedule/`: pure outage-timeline logic, no IO.
   - `timeline.py`: `to_blocks` (merge across midnight), `due_warnings`, `current_block`, `next_block`, `change_to_announce`, `is_quiet`.
   - `schemas.py`: `OutageBlock`, `DueWarning`, `GroupChange`.
-- `render/`: schedule PNG rendering (Pillow, bundled Inter fonts); look defined by `docs/schedule_image_mockup.png`.
+- `render/`: schedule PNG rendering (Pillow), look defined by `docs/schedule_image_mockup.png`.
+  - `schedule_image.py`: `render_day(day, group, now) -> bytes`, `tile_box(hour)`, `outages_word(count)`, `format_hours(minutes)`.
+    - Layout constants are in canvas pixels (final × `SCALE`); `tile_box` converts back to final pixels.
+    - `render_day` raises `ValueError` if the group isn't in the day: never draw an unknown schedule as "no outages".
+  - `theme.py`: colour constants.
+  - `fonts/`: Inter Regular/Bold + `OFL.txt` licence (keep the licence next to the fonts).
+  - `render_day` is CPU-bound (~0.1 s); call it via `asyncio.to_thread` from async code.
 - `bot/`: Telegram layer: command handlers, the address-entry FSM (`states.py`), inline keyboards, allow-list middleware, Ukrainian texts.
 - `storage/`: SQLite persistence (`db.py`) and its DTOs (`schemas.py`).
 - `monitor/`: background asyncio loops: `schedule_watcher.py` (schedule diffs), `warnings.py` (60/30-min warnings), `accident_watcher.py` (emergency start/end), `notifier.py` (safe message sending).

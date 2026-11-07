@@ -102,13 +102,13 @@ Methods:
 - `is_quiet(now, quiet_start, quiet_end) -> bool`: handles ranges that wrap midnight.
 
 ### `energy_bot/render/` (Pillow; pure, no IO except reading the fonts)
-- `theme.py`: `Theme` dataclass with the chosen palette:
+- `theme.py`: colour constants of the chosen palette:
   - bg `#121418`, title `#F4F4F6`, sub `#8A93A3`
   - power on `#F2B544` (text `#3A2A06`), power off `#262B35` (text `#7D8696`)
   - current-hour ring `#5CE1E6`, progress track `#3A4150`, chips `#232833`/`#F2B544`
   - tile radius 18
 - `fonts/`: Inter Regular + Bold (SIL OFL, bundled with its licence, so rendering is identical on Windows and the Ubuntu VM).
-- `schedule_image.py`: `render_day(day: DaySchedule, group: str, now: datetime | None, tz) -> bytes` (PNG, 1080 px wide).
+- `schedule_image.py`: `render_day(day: DaySchedule, group: str, now: datetime) -> bytes` (PNG, 1080 px wide). `now` is always the current local time: it decides the "Сьогодні/Завтра" title, and whether a ring is drawn (only when it falls on `day`).
   - Header: "Сьогодні · пт 07.11" / "Завтра · сб 08.11" / plain date for other days, and "Група 5.1 · станом на 14:05".
   - Grid: 4 columns × 6 rows of hour tiles labelled "00:00"…"23:00". Each tile is split left (:00–:30) / right (:30–:00), and each half is painted on or off. The hour label changes color at the split, so it's readable over both halves.
   - Current hour (only when `now` falls on that date): a ring around the tile, plus a progress bar inside it for minutes elapsed.
