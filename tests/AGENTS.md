@@ -11,7 +11,7 @@
   - `menus.json` (Today filled, Tomorrow empty);
   - `accidents.json` (12 real records);
   - `cities.json`, `streets.json`, `accounts.json` (only `buildingName`/`chergGpv` kept).
-- `conftest.py`: `KYIV` tz, `fixture_text(name)`, `fixture_json(name)`. Import them as `from tests.conftest import ...`.
+- `conftest.py`: `KYIV` tz, `fixture_text(name)`, `fixture_json(name)`, `to_minutes("HH:MM")`, `make_interval(start, end)`. Import them as `from tests.conftest import ...`. Shared helpers live here, not copied between test files, and no lambdas assigned to names.
 - `test_*.py`: one file per unit under test.
 
 ## Local Contracts

@@ -3,19 +3,10 @@ from datetime import date, datetime
 import pytest
 
 from energy_bot.loe.parser import parse_schedule_html
-from energy_bot.loe.schemas import Interval
-from tests.conftest import KYIV, fixture_text
+from tests.conftest import KYIV, fixture_text, make_interval
 
 ALL_GROUPS = {f"{queue}.{subqueue}" for queue in range(1, 7) for subqueue in (1, 2)}
 HEADER = "<p>Графік погодинних відключень на 01.12.2026</p>"
-
-
-def to_minutes(hh_mm: str) -> int:
-    return int(hh_mm[:2]) * 60 + int(hh_mm[3:])
-
-
-def make_interval(start: str, end: str) -> Interval:
-    return Interval(start_minutes=to_minutes(start), end_minutes=to_minutes(end))
 
 
 def test_single_interval_schedule():

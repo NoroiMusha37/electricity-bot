@@ -98,7 +98,7 @@ Methods:
 - `to_blocks(schedules: list[DaySchedule], group, tz) -> list[OutageBlock]`: converts each day's intervals for the group into aware datetimes, then **merges touching or overlapping intervals across days**. For example, 22:00–24:00 today plus 00:00–02:00 tomorrow becomes one block ending at 02:00 tomorrow. `OutageBlock(start: datetime, end: datetime)`
 - `due_warnings(blocks, now, offsets, catchup) -> list[(OutageBlock, offset)]`: a warning is due when `start - offset <= now < start - offset + catchup` and `now < start`.
 - `current_block(blocks, now)` and `next_block(blocks, now)`, used by `/status` and `/schedule`.
-- `diff_group(old: DaySchedule | None, new: DaySchedule, group) -> tuple[list[Interval], list[Interval]] | None`: returns `None` if that group is unchanged.
+- `change_to_announce(old: DaySchedule, new: DaySchedule, group) -> GroupChange | None`: `None` if there is nothing to tell the user (same periods, or the group is absent from `new`).
 - `is_quiet(now, quiet_start, quiet_end) -> bool`: handles ranges that wrap midnight.
 
 ### `energy_bot/render/` (Pillow; pure, no IO except reading the fonts)
@@ -163,7 +163,7 @@ active_accidents(chat_id INTEGER, accident_id INTEGER, date_plan_in TEXT, date_e
   1. `get_schedules()`. On error, log and skip the cycle.
   2. For each `DaySchedule`, compare it with the `get_snapshot(date)` stored for that date.
      - No previous snapshot and this isn't the first run (the DB has some snapshot) → **photo** of that day for the group, captioned "📅 Опубліковано графік на {date}".
-     - Previous snapshot exists → for each subscriber, `diff_group`. If changed, send a **photo** of the new schedule (ringed if it's today), captioned "🔄 Графік на {date} змінено\nБуло: 17:00–20:00\nСтало: 18:00–21:00".
+     - Previous snapshot exists → for each subscriber, `change_to_announce`. If changed, send a **photo** of the new schedule (ringed if it's today), captioned "🔄 Графік на {date} змінено\nБуло: 17:00–20:00\nСтало: 18:00–21:00".
      - Then `save_snapshot`.
   3. On the first run (empty DB), save silently.
   4. If `Today` becomes empty, nothing happens: the last snapshot is kept.

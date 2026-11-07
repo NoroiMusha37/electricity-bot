@@ -8,7 +8,9 @@
 
 - `main.py`: entry point (`python -m energy_bot.main`). Builds the Bot and Dispatcher, initialises the DB, starts the monitor tasks, runs long polling.
 - `config.py`: `Settings` (pydantic-settings, read from `.env`; template in `/.env.example`): `BOT_TOKEN`, `ALLOWED_USER_IDS`, `DB_PATH`, timezone, poll intervals, warning offsets and catch-up window, default quiet hours, log level. List settings accept `1,2` or `[1, 2]`.
-- `schedule/`: pure outage-timeline logic (merging intervals across midnight, due warnings, diffs, quiet hours). No IO.
+- `schedule/`: pure outage-timeline logic, no IO.
+  - `timeline.py`: `to_blocks` (merge across midnight), `due_warnings`, `current_block`, `next_block`, `change_to_announce`, `is_quiet`.
+  - `schemas.py`: `OutageBlock`, `DueWarning`, `GroupChange`.
 - `render/`: schedule PNG rendering (Pillow, bundled Inter fonts); look defined by `docs/schedule_image_mockup.png`.
 - `bot/`: Telegram layer: command handlers, the address-entry FSM (`states.py`), inline keyboards, allow-list middleware, Ukrainian texts.
 - `storage/`: SQLite persistence (`db.py`) and its DTOs (`schemas.py`).

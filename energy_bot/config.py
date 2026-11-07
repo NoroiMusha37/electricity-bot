@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     ACCIDENT_POLL_SECONDS: int = 180
     WARNING_TICK_SECONDS: int = 60
     WARNING_OFFSETS_MINUTES: Annotated[list[int], NoDecode] = [60, 30]
-    WARNING_CATCHUP_MINUTES: int = 10
+    WARNING_CATCHUP_MINUTES: int = 10  # must be smaller than the gap between warning offsets
 
     DEFAULT_QUIET_START: time = time(23, 0)
     DEFAULT_QUIET_END: time = time(7, 0)
