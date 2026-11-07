@@ -30,7 +30,7 @@ The repo has only docs committed (`[init] the project`). Hosting: Oracle Cloud A
   - `pw_cities?pagination=false&name=<part>` does a **partial, case-insensitive** search and returns the OTG name too.
   - `pw_streets?pagination=false&city.id=X&name=<part>` is partial as well.
   - `pw_accounts?pagination=false&city.id=X&street.id=Y&buildingName=171` is an exact building match; the group is `chergGpv`. Only `buildingName` and `chergGpv` are ever read.
-- **Emergencies:** `pw_accidents?city.id=X&street.id=Y&page=N` (Hydra paging via `hydra:view.hydra:next`).
+- **Emergencies:** `pw_accidents?city.id=X&street.id=Y` (first page of 30 is enough for one street).
   - Fields: `id`, `buildingNames` ("5, 9" or empty = whole street), `dateEvent` (start), `datePlanIn` (planned restore), `typeOff`, `koment`.
 
 ## Project structure
@@ -41,7 +41,7 @@ energy_bot/
   __init__.py                     (empty — every package has an empty __init__.py)
   main.py                         entry point
   config.py                       Settings
-  loe/        client.py, schemas.py, parser.py
+  loe/        client.py, schemas.py, parser.py, buildings.py (building number normalisation)
   schedule/   timeline.py, schemas.py       pure time logic (no IO)
   render/     schedule_image.py, theme.py, fonts/ (Inter Regular+Bold .ttf + OFL.txt)
   storage/    db.py, schemas.py
@@ -69,7 +69,7 @@ deploy/       energy-bot.service, README.md, AGENTS.md
 - property `tz -> ZoneInfo`
 
 ### `energy_bot/loe/schemas.py`
-- `Interval(start: time, end_minutes: int)`. `end_minutes` is 1–1440, so that 24:00 is representable.
+- `Interval(start_minutes: int, end_minutes: int)` in minutes since midnight. `end_minutes` is 1–1440, so that 24:00 is representable.
 - `DaySchedule(date: date, info_as_of: datetime | None, groups: dict[str, list[Interval]])`
 - `MenuItem(name, raw_html)`
 - `City(id, name, otg_id, otg_name)`
@@ -85,14 +85,14 @@ deploy/       energy-bot.service, README.md, AGENTS.md
 5. Return `None` if there is no date or no groups.
 
 ### `energy_bot/loe/client.py`: `LoeClient`
-Wraps one shared `httpx.AsyncClient` with a generic UA, a 30 s timeout, and 3 retries with 1/2/4 s backoff on network errors and 5xx responses. It raises `LoeError` on failure.
+Wraps one shared `httpx.AsyncClient` with a generic UA and a 30 s timeout. Network errors, 429 and 5xx get one retry after 2 s. It raises `LoeError` on failure; malformed records are skipped one by one.
 
 Methods:
 - `get_schedules() -> list[DaySchedule]`: Today and Tomorrow, parsed; `None`s are skipped.
 - `search_cities(text) -> list[City]`
 - `search_streets(city_id, text) -> list[Street]`
-- `find_groups(city_id, street_id, building) -> set[str]`: tries the building as typed, then upper and lower case variants.
-- `get_accidents(city_id, street_id) -> list[Accident]`: follows paging.
+- `find_groups(city_id, street_id, building) -> BuildingLookup(found, groups, building)`: `building` is LOE's spelling of the matched building, and it's what gets stored. tries the canonical spelling (`116а` → `116-А`) first, then as typed and in upper and lower case. `found=True` with empty `groups` means the building isn't on the hourly schedule ("Не входить").
+- `get_accidents(city_id, street_id) -> list[Accident]`: first page only.
 
 ### `energy_bot/schedule/timeline.py` (pure functions; most of the logic and the most tests)
 - `to_blocks(schedules: list[DaySchedule], group, tz) -> list[OutageBlock]`: converts each day's intervals for the group into aware datetimes, then **merges touching or overlapping intervals across days**. For example, 22:00–24:00 today plus 00:00–02:00 tomorrow becomes one block ending at 02:00 tomorrow. `OutageBlock(start: datetime, end: datetime)`

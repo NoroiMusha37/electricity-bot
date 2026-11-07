@@ -1,0 +1,138 @@
+{
+  "@context": "/api/contexts/PwStreet",
+  "@id": "/api/pw_streets",
+  "@type": "hydra:Collection",
+  "hydra:totalItems": 18,
+  "hydra:member": [
+    {
+      "@id": "/api/pw_streets/12564",
+      "@type": "PwStreet",
+      "id": 12564,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька"
+    },
+    {
+      "@id": "/api/pw_streets/12874",
+      "@type": "PwStreet",
+      "id": 12874,
+      "city": "/api/pw_cities/693",
+      "name": "Ужгородська"
+    },
+    {
+      "@id": "/api/pw_streets/13195",
+      "@type": "PwStreet",
+      "id": 13195,
+      "city": "/api/pw_cities/693",
+      "name": "Городницька"
+    },
+    {
+      "@id": "/api/pw_streets/13561",
+      "@type": "PwStreet",
+      "id": 13561,
+      "city": "/api/pw_cities/693",
+      "name": "Миргородська"
+    },
+    {
+      "@id": "/api/pw_streets/14187",
+      "@type": "PwStreet",
+      "id": 14187,
+      "city": "/api/pw_cities/693",
+      "name": "Загородня"
+    },
+    {
+      "@id": "/api/pw_streets/22130",
+      "@type": "PwStreet",
+      "id": 22130,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Ряшівська"
+    },
+    {
+      "@id": "/api/pw_streets/22185",
+      "@type": "PwStreet",
+      "id": 22185,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Величка"
+    },
+    {
+      "@id": "/api/pw_streets/22204",
+      "@type": "PwStreet",
+      "id": 22204,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Кропивницького"
+    },
+    {
+      "@id": "/api/pw_streets/22218",
+      "@type": "PwStreet",
+      "id": 22218,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Корсунська"
+    },
+    {
+      "@id": "/api/pw_streets/22254",
+      "@type": "PwStreet",
+      "id": 22254,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Лепкого"
+    },
+    {
+      "@id": "/api/pw_streets/22259",
+      "@type": "PwStreet",
+      "id": 22259,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Гоголя"
+    },
+    {
+      "@id": "/api/pw_streets/22271",
+      "@type": "PwStreet",
+      "id": 22271,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Збиральна"
+    },
+    {
+      "@id": "/api/pw_streets/22439",
+      "@type": "PwStreet",
+      "id": 22439,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Виговського"
+    },
+    {
+      "@id": "/api/pw_streets/22518",
+      "@type": "PwStreet",
+      "id": 22518,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Леонтовича"
+    },
+    {
+      "@id": "/api/pw_streets/22647",
+      "@type": "PwStreet",
+      "id": 22647,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Шевченка"
+    },
+    {
+      "@id": "/api/pw_streets/22656",
+      "@type": "PwStreet",
+      "id": 22656,
+      "city": "/api/pw_cities/693",
+      "name": "Городоцька-Фабрична"
+    },
+    {
+      "@id": "/api/pw_streets/31848",
+      "@type": "PwStreet",
+      "id": 31848,
+      "city": "/api/pw_cities/693",
+      "name": "Звенигородська. пл."
+    },
+    {
+      "@id": "/api/pw_streets/38986",
+      "@type": "PwStreet",
+      "id": 38986,
+      "city": "/api/pw_cities/693",
+      "name": "Суха-Городоцька"
+    }
+  ],
+  "hydra:view": {
+    "@id": "/api/pw_streets?city.id=693&name=%D0%B3%D0%BE%D1%80%D0%BE%D0%B4&pagination=false",
+    "@type": "hydra:PartialCollectionView"
+  }
+}

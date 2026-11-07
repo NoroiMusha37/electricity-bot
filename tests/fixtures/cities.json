@@ -1,0 +1,48 @@
+{
+  "@context": "/api/contexts/PwCity",
+  "@id": "/api/pw_cities",
+  "@type": "hydra:Collection",
+  "hydra:totalItems": 3,
+  "hydra:member": [
+    {
+      "@id": "/api/pw_cities/692",
+      "@type": "PwCity",
+      "id": 692,
+      "name": "Сороки-Львівські",
+      "codeOtg": "UA46060270000027170",
+      "otg": {
+        "@id": "/api/pw_otgs/29",
+        "@type": "PwOtg",
+        "name": "Мурованська"
+      }
+    },
+    {
+      "@id": "/api/pw_cities/693",
+      "@type": "PwCity",
+      "id": 693,
+      "name": "Львів",
+      "codeOtg": "UA46060250000025047",
+      "otg": {
+        "@id": "/api/pw_otgs/28",
+        "@type": "PwOtg",
+        "name": "Львівська"
+      }
+    },
+    {
+      "@id": "/api/pw_cities/966",
+      "@type": "PwCity",
+      "id": 966,
+      "name": "Ульвівок",
+      "codeOtg": "UA46120110000062257",
+      "otg": {
+        "@id": "/api/pw_otgs/69",
+        "@type": "PwOtg",
+        "name": "Сокальська"
+      }
+    }
+  ],
+  "hydra:view": {
+    "@id": "/api/pw_cities?name=%D0%BB%D1%8C%D0%B2&pagination=false",
+    "@type": "hydra:PartialCollectionView"
+  }
+}

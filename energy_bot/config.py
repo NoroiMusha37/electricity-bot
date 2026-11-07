@@ -9,8 +9,7 @@ from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 def _parse_int_list(value: object) -> object:
     """Accept both `123,456` and `[123, 456]` from the environment."""
     if isinstance(value, str):
-        value = value.strip().strip("[]")
-        return [int(part) for part in value.split(",") if part.strip()]
+        return [int(part) for part in value.strip().strip("[]").split(",") if part.strip()]
     return value
 
 

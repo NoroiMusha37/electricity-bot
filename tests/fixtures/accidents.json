@@ -1,0 +1,476 @@
+{
+  "@context": "/api/contexts/PwAccident",
+  "@id": "/api/pw_accidents",
+  "@type": "hydra:Collection",
+  "hydra:totalItems": 12,
+  "hydra:member": [
+    {
+      "@id": "/api/pw_accidents/277805581",
+      "@type": "PwAccident",
+      "id": 277805581,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4194",
+        "@type": "PwStreet",
+        "id": 4194,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Тернопільська"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "25, 30-А",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805582",
+      "@type": "PwAccident",
+      "id": 277805582,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4195",
+        "@type": "PwStreet",
+        "id": 4195,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Львівська"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "17, 27, 33, 36, 38, 40-А",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805583",
+      "@type": "PwAccident",
+      "id": 277805583,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4338",
+        "@type": "PwStreet",
+        "id": 4338,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Плугівецька"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "15, 16, 17, 24, 26, 27, 28, 28-Д, 29-А, 3, 30, 31-А, 33, 34-А, 39, 40, 40-А, 42, 43, 44, 46, 51, 7, 9",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805584",
+      "@type": "PwAccident",
+      "id": 277805584,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4637",
+        "@type": "PwStreet",
+        "id": 4637,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Долина"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "8-А",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805585",
+      "@type": "PwAccident",
+      "id": 277805585,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4639",
+        "@type": "PwStreet",
+        "id": 4639,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Плугівець"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "11, 41",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805586",
+      "@type": "PwAccident",
+      "id": 277805586,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/38473",
+        "@type": "PwStreet",
+        "id": 38473,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Діброва"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "9-Б",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805587",
+      "@type": "PwAccident",
+      "id": 277805587,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4194",
+        "@type": "PwStreet",
+        "id": 4194,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Тернопільська"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "25, 30-А",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805588",
+      "@type": "PwAccident",
+      "id": 277805588,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4195",
+        "@type": "PwStreet",
+        "id": 4195,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Львівська"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "17, 27, 33, 36, 38, 40-А",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805589",
+      "@type": "PwAccident",
+      "id": 277805589,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4338",
+        "@type": "PwStreet",
+        "id": 4338,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Плугівецька"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "15, 16, 17, 24, 26, 27, 28, 28-Д, 29-А, 3, 30, 31-А, 33, 34-А, 39, 40, 40-А, 42, 43, 44, 46, 51, 7, 9",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805590",
+      "@type": "PwAccident",
+      "id": 277805590,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4637",
+        "@type": "PwStreet",
+        "id": 4637,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Долина"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "8-А",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805591",
+      "@type": "PwAccident",
+      "id": 277805591,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/4639",
+        "@type": "PwStreet",
+        "id": 4639,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Плугівець"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "11, 41",
+      "typeOff": 1
+    },
+    {
+      "@id": "/api/pw_accidents/277805592",
+      "@type": "PwAccident",
+      "id": 277805592,
+      "code_otg": "UA46040070000032075",
+      "city": {
+        "@id": "/api/pw_cities/442",
+        "@type": "PwCity",
+        "id": 442,
+        "name": "Плугів",
+        "codeOtg": "UA46040070000032075"
+      },
+      "street": {
+        "@id": "/api/pw_streets/38473",
+        "@type": "PwStreet",
+        "id": 38473,
+        "city": {
+          "@id": "/api/pw_cities/442",
+          "@type": "PwCity",
+          "id": 442,
+          "name": "Плугів",
+          "codeOtg": "UA46040070000032075"
+        },
+        "name": "Діброва"
+      },
+      "dateEvent": "2026-11-06T18:05:20+02:00",
+      "datePlanIn": "2026-11-06T20:30:00+02:00",
+      "koment": "",
+      "switchSubReason": 0,
+      "otg": {
+        "@id": "/api/pw_otgs/12",
+        "@type": "PwOtg",
+        "id": 12,
+        "code": "UA46040070000032075",
+        "name": "Золочівська"
+      },
+      "buildingNames": "9-Б",
+      "typeOff": 1
+    }
+  ]
+}
