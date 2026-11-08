@@ -11,6 +11,7 @@ from energy_bot.bot import texts
 from energy_bot.bot.handlers import router
 from energy_bot.bot.middlewares import AllowListMiddleware
 from energy_bot.config import settings
+from energy_bot.health import start_health_server
 from energy_bot.loe.client import LoeClient
 from energy_bot.monitor.accident_watcher import check_accidents
 from energy_bot.monitor.notifier import Notifier
@@ -56,7 +57,10 @@ async def main() -> None:
         ),
         asyncio.create_task(run_forever("database prune", PRUNE_INTERVAL_SECONDS, db.prune, settings.TZ)),
     ]
+    health_server = None
     try:
+        if settings.HEALTH_PORT is not None:
+            health_server = await start_health_server(settings.HEALTH_HOST, settings.HEALTH_PORT)
         await bot.set_my_commands(
             [BotCommand(command=command, description=description) for command, description in texts.COMMANDS.items()]
         )
@@ -66,6 +70,8 @@ async def main() -> None:
         for monitor in monitors:
             monitor.cancel()
         await asyncio.gather(*monitors, return_exceptions=True)
+        if health_server is not None:
+            await health_server.cleanup()
         await bot.session.close()
         await loe.aclose()
         await db.close()

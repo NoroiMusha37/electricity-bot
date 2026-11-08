@@ -33,6 +33,9 @@ class Settings(BaseSettings):
 
     LOG_LEVEL: str = "INFO"
 
+    HEALTH_PORT: int | None = None  # set it to serve an "ok" endpoint (needed by alwaysdata); unset = no web server
+    HEALTH_HOST: str = "0.0.0.0"
+
     _split_lists = field_validator("ALLOWED_USER_IDS", "WARNING_OFFSETS_MINUTES", mode="before")(_parse_int_list)
 
     @property

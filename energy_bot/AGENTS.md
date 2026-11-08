@@ -7,6 +7,7 @@
 ## Ownership
 
 - `main.py`: entry point (`python -m energy_bot.main`). Builds the Bot and Dispatcher, initialises the DB, starts the monitor tasks, runs long polling.
+- `health.py`: `start_health_server(host, port)`, a tiny aiohttp endpoint answering "ok". Started by `main.py` only when `HEALTH_PORT` is set; used by hosts that run programs as websites, plus an external pinger.
 - `config.py`: `Settings` and the module-level `settings = Settings()` used everywhere (pydantic-settings, read from `.env`; template in `/.env.example`): `BOT_TOKEN`, `ALLOWED_USER_IDS`, `DB_PATH`, timezone, poll intervals, warning offsets and catch-up window, default quiet hours, log level. List settings accept `1,2` or `[1, 2]`.
 - `schedule/`: pure outage-timeline logic, no IO.
   - `timeline.py`: `to_blocks` (merge across midnight), `known_until` (where schedule knowledge ends), `due_warnings`, `current_block`, `next_block`, `change_to_announce`, `is_quiet`.

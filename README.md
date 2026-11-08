@@ -53,4 +53,4 @@ uv run pytest               # tests
 
 ## Deployment
 
-The bot runs as a systemd service on any Linux host, e.g. an Oracle Cloud Always Free VM. See `deploy/README.md`.
+The bot runs for free on alwaysdata's Free plan (as a "User program" site, kept alive by a pinger). See `deploy/README.md`.

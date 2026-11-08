@@ -94,4 +94,4 @@ When the user requests a durable behavior change, record it here or in the relev
 - `energy_bot/AGENTS.md`: application package (config, entry point, LOE client, storage, bot handlers, background monitors)
 - `tests/AGENTS.md`: pytest suite and fixtures
 - `docs/`: `PLAN.md` (agreed implementation plan), `schedule_image_mockup.png` (approved look of the schedule image) and `bot_avatar.png` (the bot's Telegram profile photo, 1024×1024)
-- `deploy/`: systemd unit and Oracle VM deployment guide (planned; gets its own AGENTS.md when created)
+- `deploy/AGENTS.md`: production deployment (alwaysdata Free "User program" site + cron-job.org pinger; update and backup procedure)

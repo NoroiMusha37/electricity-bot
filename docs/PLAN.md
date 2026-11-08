@@ -6,7 +6,7 @@ Outages in Lviv region are getting worse. The bot remembers each subscriber's ad
 - warnings 60 and 30 minutes before a scheduled outage, including when power should be back;
 - emergency outage start (with the planned restore time) and end.
 
-The repo has only docs committed (`[init] the project`). Hosting: Oracle Cloud Always Free VM; the LOE APIs are reachable from non-UA IPs.
+The repo has only docs committed (`[init] the project`). Hosting: originally planned on Oracle Cloud Always Free; in the end alwaysdata's Free plan (see `deploy/`), because the Oracle signup failed and Google required a prepayment. The LOE APIs are reachable from non-UA IPs.
 
 ## Decisions (agreed with user)
 - Access: an allow-list of Telegram user IDs in `.env` (`ALLOWED_USER_IDS`). Everyone else gets "Цей бот приватний."
@@ -199,7 +199,7 @@ After every step I stop, show the changes and the proposed message, and commit *
 | 5 | `storage/` + tests (tmp-file SQLite) | `[add] SQLite storage` |
 | 6 | `bot/` + `main.py` (polling, commands, address FSM, allow-list); README commands updated (`/quiet`) | `[add] bot commands and address setup` |
 | 7 | `monitor/` + wiring in `main.py` + tests | `[add] outage monitors and notifications` |
-| 8 | `deploy/energy-bot.service`, `deploy/README.md` (Oracle VM: create instance, install uv, clone, `.env`, `systemctl enable --now`, logs), `deploy/AGENTS.md` | `[add] deployment guide` |
+| 8 | `energy_bot/health.py` ("ok" endpoint), `deploy/README.md` (alwaysdata Free: copy, install, User program site, idle time 0, cron-job.org pinger, logs, updates, backup), `deploy/AGENTS.md` | `[add] deployment guide` |
 
 ## Verification
 - `uv run pytest` after each step. Key cases:
