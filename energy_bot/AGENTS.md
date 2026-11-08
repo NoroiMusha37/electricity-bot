@@ -19,7 +19,10 @@
   - `fonts/`: Inter Regular/Bold + `OFL.txt` licence (keep the licence next to the fonts).
   - `render_day` is CPU-bound (~0.1 s); call it via `asyncio.to_thread` from async code.
 - `bot/`: Telegram layer: command handlers, the address-entry FSM (`states.py`), inline keyboards, allow-list middleware, Ukrainian texts.
-- `storage/`: SQLite persistence (`db.py`) and its DTOs (`schemas.py`).
+- `storage/`: SQLite persistence.
+  - `db.py`: `Database.connect(path)`; one aiosqlite connection, WAL; tables created with `CREATE TABLE IF NOT EXISTS`.
+  - `schemas.py`: `Subscriber` (field `outage_group`; `has_address`), `ActiveAccident`.
+  - Schedules are stored as whole `DaySchedule` JSON per date; times and datetimes as ISO strings.
 - `monitor/`: background asyncio loops: `schedule_watcher.py` (schedule diffs), `warnings.py` (60/30-min warnings), `accident_watcher.py` (emergency start/end), `notifier.py` (safe message sending).
 - Child-owned: `loe/` (see its AGENTS.md).
 

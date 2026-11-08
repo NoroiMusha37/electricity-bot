@@ -119,24 +119,22 @@ Methods:
   - A day with no outages: all tiles on, and a chip "Відключень не заплановано".
   - Drawn at 2× and downscaled with LANCZOS for anti-aliasing. Callers run it via `asyncio.to_thread` so the event loop isn't blocked.
 
-### `energy_bot/storage/db.py`: `Database` (aiosqlite, opened once, WAL mode)
+### `energy_bot/storage/db.py`: `Database` (aiosqlite, one connection, WAL mode)
 ```sql
-subscribers(chat_id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL,
-  city_id INTEGER, city_name TEXT, otg_name TEXT, street_id INTEGER, street_name TEXT,
-  building TEXT, grp TEXT NOT NULL,
+subscribers(chat_id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL, outage_group TEXT NOT NULL,
+  city_id INTEGER, city_name TEXT, otg_name TEXT, street_id INTEGER, street_name TEXT, building TEXT,
   quiet_start TEXT NOT NULL, quiet_end TEXT NOT NULL, quiet_enabled INTEGER NOT NULL DEFAULT 1,
-  active INTEGER NOT NULL DEFAULT 1, created_at TEXT, updated_at TEXT)
-schedule_snapshots(date TEXT PRIMARY KEY, info_as_of TEXT, groups_json TEXT NOT NULL, fetched_at TEXT NOT NULL)
+  active INTEGER NOT NULL DEFAULT 1)
+schedule_snapshots(date TEXT PRIMARY KEY, schedule_json TEXT NOT NULL)   -- whole DaySchedule as JSON
 sent_notifications(chat_id INTEGER, key TEXT, sent_at TEXT, PRIMARY KEY(chat_id, key))
-active_accidents(chat_id INTEGER, accident_id INTEGER, date_plan_in TEXT, date_event TEXT,
-  PRIMARY KEY(chat_id, accident_id))
+active_accidents(chat_id INTEGER, accident_id INTEGER, date_plan_in TEXT, PRIMARY KEY(chat_id, accident_id))
 ```
-- Subscribers: `upsert_subscriber`, `set_group` (manual: the address fields are cleared, so there's no emergency tracking), `set_quiet`, `deactivate`, `delete_subscriber`, `get_subscriber`, `active_subscribers`.
-- Snapshots: `get_snapshot(date)`, `save_snapshot(DaySchedule)`, `recent_snapshots(from_date)`.
-- Notifications: `mark_sent(chat_id, key) -> bool` returns False if the key was already present, so the dedupe check and the insert happen in one step.
-- Accidents: `active_accidents_for(chat_id)`, `add_accident`, `update_accident_plan`, `remove_accident`.
+- Subscribers: `upsert_subscriber` (also used by `/group`: the address fields are cleared, so there's no emergency tracking), `get_subscriber`, `active_subscribers`, `set_quiet_hours`, `deactivate`, `delete_subscriber`.
+- Snapshots: `has_snapshots()`, `get_snapshot(date)`, `recent_snapshots(since)`, `save_snapshot(DaySchedule)`.
+- Notifications: `is_sent(chat_id, key)` and `mark_sent(chat_id, key, now)`. The sender marks only **after** a successful send, so a failed send is retried on the next tick.
+- Accidents: `active_accidents(chat_id)`, `save_accident(chat_id, ActiveAccident)` (insert or update the restore time), `remove_accident`.
 - `prune(now)`: drops snapshots older than 7 days and sent keys older than 3 days.
-- `storage/schemas.py` holds the `Subscriber` and `ActiveAccident` pydantic models.
+- `storage/schemas.py` holds the `Subscriber` (with `has_address`) and `ActiveAccident` pydantic models.
 
 ### `energy_bot/bot/`
 - `middlewares.py`: `AllowListMiddleware`, an outer middleware on messages and callbacks. A non-allowed user gets the refusal text, and the handler doesn't run.
@@ -169,16 +167,16 @@ active_accidents(chat_id INTEGER, accident_id INTEGER, date_plan_in TEXT, date_e
   4. If `Today` becomes empty, nothing happens: the last snapshot is kept.
 
 - **`warnings.py`** runs every 60 s:
-  1. For each subscriber, build `to_blocks(recent snapshots for yesterday/today/tomorrow, grp)`.
-  2. For each due `(block, offset)` where `mark_sent(chat, f"warn|{block.start.isoformat()}|{offset}")` succeeds, send "⏰ Через {offset} хв (о {start}) вимкнення світла. Світло має з'явитися о {end}{' завтра' if next day}."
+  1. For each subscriber, build `to_blocks(recent snapshots for yesterday/today/tomorrow, outage_group)`.
+  2. For each due `(block, offset)` not yet `is_sent(chat, f"warn|{block.start.isoformat()}|{offset}")`, send "⏰ Через {offset} хв (о {start}) вимкнення світла. Світло має з'явитися о {end}{' завтра' if next day}."
   3. Because the key includes the block start, a schedule change that moves an outage produces fresh warnings.
 
 - **`accident_watcher.py`** runs every 3 min:
   1. Group active subscribers that have an address by `(city_id, street_id)` and call `get_accidents` once per group. On error, skip that group.
   2. Building match: normalise (lowercase, remove spaces) and test `building in building_names`; an empty list means the whole street.
-  3. Compare the matches with `active_accidents_for(chat)`:
-     - New → "⚠️ Аварійне відключення з {dateEvent:%H:%M}. Орієнтовне відновлення: {datePlanIn}." and `add_accident`.
-     - Changed `datePlanIn` → "🕑 Оновлено час відновлення: {new}" and `update_accident_plan`.
+  3. Compare the matches with `active_accidents(chat)`:
+     - New → "⚠️ Аварійне відключення з {dateEvent:%H:%M}. Орієнтовне відновлення: {datePlanIn}." and `save_accident`.
+     - Changed `datePlanIn` → "🕑 Оновлено час відновлення: {new}" and `save_accident`.
      - Gone → "✅ Аварійне відключення завершено." and `remove_accident`.
 
 ### `energy_bot/main.py`
