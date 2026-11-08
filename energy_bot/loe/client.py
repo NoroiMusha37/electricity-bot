@@ -92,7 +92,8 @@ class LoeClient:
 
     async def get_schedules(self) -> list[DaySchedule]:
         """Today's and tomorrow's schedules; days without a published schedule are omitted."""
-        payload = await self._get_json(f"{SCHEDULE_API}/menus", {"page": 1, "type": "photo-grafic"})
+        # Without jsonld=1 this server answers with a plain JSON list instead of a Hydra collection.
+        payload = await self._get_json(f"{SCHEDULE_API}/menus", {"page": 1, "type": "photo-grafic", "jsonld": 1})
         try:
             # Only Today/Tomorrow are kept; the large archive item is dropped before validation.
             schedule_items = [

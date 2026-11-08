@@ -7,9 +7,9 @@
 ## Ownership
 
 - `main.py`: entry point (`python -m energy_bot.main`). Builds the Bot and Dispatcher, initialises the DB, starts the monitor tasks, runs long polling.
-- `config.py`: `Settings` (pydantic-settings, read from `.env`; template in `/.env.example`): `BOT_TOKEN`, `ALLOWED_USER_IDS`, `DB_PATH`, timezone, poll intervals, warning offsets and catch-up window, default quiet hours, log level. List settings accept `1,2` or `[1, 2]`.
+- `config.py`: `Settings` and the module-level `settings = Settings()` used everywhere (pydantic-settings, read from `.env`; template in `/.env.example`): `BOT_TOKEN`, `ALLOWED_USER_IDS`, `DB_PATH`, timezone, poll intervals, warning offsets and catch-up window, default quiet hours, log level. List settings accept `1,2` or `[1, 2]`.
 - `schedule/`: pure outage-timeline logic, no IO.
-  - `timeline.py`: `to_blocks` (merge across midnight), `due_warnings`, `current_block`, `next_block`, `change_to_announce`, `is_quiet`.
+  - `timeline.py`: `to_blocks` (merge across midnight), `known_until` (where schedule knowledge ends), `due_warnings`, `current_block`, `next_block`, `change_to_announce`, `is_quiet`.
   - `schemas.py`: `OutageBlock`, `DueWarning`, `GroupChange`.
 - `render/`: schedule PNG rendering (Pillow), look defined by `docs/schedule_image_mockup.png`.
   - `schedule_image.py`: `render_day(day, group, now) -> bytes`, `tile_box(hour)`, `outages_word(count)`, `format_hours(minutes)`.
@@ -18,7 +18,11 @@
   - `theme.py`: colour constants.
   - `fonts/`: Inter Regular/Bold + `OFL.txt` licence (keep the licence next to the fonts).
   - `render_day` is CPU-bound (~0.1 s); call it via `asyncio.to_thread` from async code.
-- `bot/`: Telegram layer: command handlers, the address-entry FSM (`states.py`), inline keyboards, allow-list middleware, Ukrainian texts.
+- `bot/`: Telegram layer.
+  - `handlers.py`: one `router` with all commands, the address dialogue (FSM) and the error handler. `db` and `loe` are injected by aiogram from `Dispatcher(db=..., loe=...)`.
+  - `states.py` (`AddressForm`), `schemas.py` (callback data), `keyboards.py` (`choices_keyboard`), `middlewares.py` (`AllowListMiddleware`).
+  - `texts.py`: every Ukrainian text and its formatting (`status`, `moment`, ...). Keep texts out of the handlers.
+  - `schedule_source.py`: `load_schedules` = stored snapshots, or LOE when today's isn't stored. It never saves: the schedule watcher is the only snapshot writer.
 - `storage/`: SQLite persistence.
   - `db.py`: `Database.connect(path)`; one aiosqlite connection, WAL; tables created with `CREATE TABLE IF NOT EXISTS`.
   - `schemas.py`: `Subscriber` (field `outage_group`; `has_address`), `ActiveAccident`.
@@ -31,9 +35,11 @@
 - All time logic uses `ZoneInfo("Europe/Kyiv")`; never naive datetimes.
 - Monitors never notify on a failed fetch. They keep the last good data and log the error.
 - Every notification is deduplicated through the DB (`sent_notifications`, `active_accidents`), so a restart never causes duplicate messages.
-- Warnings merge back-to-back outage intervals and always state when power should return.
+- Warnings merge back-to-back outage intervals and always state when power should return. If a block ends exactly at `known_until` (next day not published), the return time is hedged: "не раніше 00:00 (графік на завтра ще не опубліковано)". `/status` does the same, and says "Графік на сьогодні ще не опубліковано" rather than "no outages" when today's schedule is unknown.
 - A subscriber who blocks the bot is deactivated, not deleted.
 - Bot handlers do no HTTP calls of their own; they go through `energy_bot.loe.client.LoeClient`.
+- Every button tap must be answered: `stale_button` (registered last) catches taps no other handler accepts, and choice handlers route unknown ids to it.
+- Slow handler work (LOE requests, rendering) runs inside `ChatActionSender` so the user sees "typing…" / "sending photo…".
 
 ## Work Guidance
 

@@ -4,7 +4,15 @@ import pytest
 
 from energy_bot.loe.schemas import DaySchedule
 from energy_bot.schedule.schemas import OutageBlock
-from energy_bot.schedule.timeline import change_to_announce, current_block, due_warnings, is_quiet, next_block, to_blocks
+from energy_bot.schedule.timeline import (
+    change_to_announce,
+    current_block,
+    due_warnings,
+    is_quiet,
+    known_until,
+    next_block,
+    to_blocks,
+)
 from tests.conftest import KYIV, make_interval
 
 DAY = date(2026, 11, 10)
@@ -54,6 +62,13 @@ def test_blocks_keep_local_wall_clock_on_dst_change():
     [outage] = to_blocks([schedule(dst_end, ("02:00", "05:00"))], "5.1", KYIV)
     assert (outage.start.hour, outage.end.hour) == (2, 5)
     assert (outage.start.utcoffset(), outage.end.utcoffset()) == (timedelta(hours=3), timedelta(hours=2))
+
+
+def test_known_until_is_midnight_after_last_day_with_the_group():
+    schedules = [schedule(DAY, ("08:00", "10:00")), schedule(NEXT_DAY, ("08:00", "09:00"), group="1.1")]
+    assert known_until(schedules, "5.1", KYIV) == at(NEXT_DAY, "00:00")  # NEXT_DAY doesn't mention 5.1
+    assert known_until(schedules, "1.1", KYIV) == datetime.combine(NEXT_DAY + timedelta(days=1), time(), tzinfo=KYIV)
+    assert known_until([], "5.1", KYIV) is None
 
 
 def test_warning_due_inside_window_only():

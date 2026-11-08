@@ -14,14 +14,18 @@ Telegram bot for Lviv region power outages, using public data from Львіво�
 
 ## Bot commands
 
-| Command      | Action                                                      |
-|--------------|-------------------------------------------------------------|
-| `/start`     | Greeting and help                                           |
-| `/address`   | Set or change your address (settlement → street → building) |
-| `/group 5.1` | Set the group manually if the address lookup fails          |
-| `/schedule`  | Today's and tomorrow's schedule for your group              |
-| `/status`    | Your saved address, group and any active emergency outage   |
-| `/stop`      | Unsubscribe and delete your data                            |
+| Command                              | Action                                                                    |
+|--------------------------------------|---------------------------------------------------------------------------|
+| `/start`                             | Greeting and help                                                         |
+| `/address`                           | Set or change your address (settlement → street → building)               |
+| `/group 5.1`                         | Set the group manually if the address lookup fails                        |
+| `/schedule`                          | Today's and tomorrow's schedule for your group, as images                 |
+| `/status`                            | Is there power now, when it changes next, active emergencies, settings    |
+| `/quiet 23:00 07:00`, `/quiet off/on` | Quiet hours: notifications arrive without sound                          |
+| `/stop`                              | Unsubscribe and delete your data                                          |
+| `/cancel`                            | Cancel the address dialogue                                               |
+
+The bot is private: only Telegram users listed in `ALLOWED_USER_IDS` can use it.
 
 ## Data sources
 

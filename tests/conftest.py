@@ -1,8 +1,13 @@
 import json
+import os
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from energy_bot.loe.schemas import Interval
+# energy_bot.config builds `settings` at import; tests must not depend on a developer's .env.
+os.environ.setdefault("BOT_TOKEN", "1:test-token")
+os.environ.setdefault("ALLOWED_USER_IDS", "1")
+
+from energy_bot.loe.schemas import Interval  # noqa: E402
 
 FIXTURES = Path(__file__).parent / "fixtures"
 KYIV = ZoneInfo("Europe/Kyiv")

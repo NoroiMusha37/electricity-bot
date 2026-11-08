@@ -148,7 +148,7 @@ active_accidents(chat_id INTEGER, accident_id INTEGER, date_plan_in TEXT, PRIMAR
 | `/start` | greeting + command list; new users → prompts `/address` |
 | `/address` | FSM: "Введіть населений пункт" → `search_cities` → buttons "Львів (Львівська ОТГ)" → "Введіть вулицю" → `search_streets` → buttons → "Введіть номер будинку" → `find_groups`: 1 group → save; several → buttons; none → "Будинок не знайдено, перевірте номер або встановіть групу вручну: /group 5.1". Confirms with today's schedule for the group. |
 | `/group 5.1` | validate `^[1-6]\.[12]$`, save without address (warns that emergency alerts need an address) |
-| `/schedule` | photo of today (current hour ringed) + photo of tomorrow if published, from the latest snapshots; caption: total without power + periods. If nothing is published: text "графік ще не опубліковано" |
+| `/schedule` | photo of today (current hour ringed) + photo of tomorrow if published, without caption (the image already shows totals and periods). Source: `bot/schedule_source.load_schedules` (stored snapshots, or LOE if today's isn't stored; never saved). If nothing is published: "Графік для вашої групи ще не опубліковано" |
 | `/status` | text only: "🔴 Зараз світла немає. З'явиться о 15:30" / "🟢 Світло є. Наступне вимкнення о 20:00 (до 22:00)", active emergencies with restore time, address, group, quiet hours |
 | `/quiet 23:00 07:00` / `/quiet off` | set/disable quiet hours |
 | `/stop` | delete subscriber data |
@@ -168,7 +168,7 @@ active_accidents(chat_id INTEGER, accident_id INTEGER, date_plan_in TEXT, PRIMAR
 
 - **`warnings.py`** runs every 60 s:
   1. For each subscriber, build `to_blocks(recent snapshots for yesterday/today/tomorrow, outage_group)`.
-  2. For each due `(block, offset)` not yet `is_sent(chat, f"warn|{block.start.isoformat()}|{offset}")`, send "⏰ Через {offset} хв (о {start}) вимкнення світла. Світло має з'явитися о {end}{' завтра' if next day}."
+  2. For each due `(block, offset)` not yet `is_sent(chat, f"warn|{block.start.isoformat()}|{offset}")`, send "⏰ Через {offset} хв (о {start}) вимкнення світла. Світло має з'явитися о {end}{' завтра' if next day}." If the block ends at `known_until` (next day unpublished): "…не раніше 00:00 (графік на завтра ще не опубліковано)."
   3. Because the key includes the block start, a schedule change that moves an outage produces fresh warnings.
 
 - **`accident_watcher.py`** runs every 3 min:

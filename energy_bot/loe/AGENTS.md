@@ -19,7 +19,7 @@
 
 ## Local Contracts
 
-- Schedule: `GET https://api.loe.lviv.ua/api/menus?page=1&type=photo-grafic`. Use the `menuItems` named `Today` and `Tomorrow`; an empty `rawHtml` means no schedule, and the day is omitted.
+- Schedule: `GET https://api.loe.lviv.ua/api/menus?page=1&type=photo-grafic&jsonld=1`. `jsonld=1` is required: without it this server returns a plain JSON list, not a Hydra collection. LOE's own frontend sends it too. Use the `menuItems` named `Today` and `Tomorrow`; an empty `rawHtml` means no schedule, and the day is omitted.
 - `rawHtml` lines: `Група X.Y. Електроенергії немає з HH:MM до HH:MM[, з HH:MM до HH:MM].` or `Група X.Y. Електроенергія є.` (→ empty list).
   - The parser extracts every `з … до …` pair.
   - `24:00` (and an end of `00:00`) means end of day.

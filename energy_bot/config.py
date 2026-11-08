@@ -38,3 +38,7 @@ class Settings(BaseSettings):
     @property
     def TZ(self) -> ZoneInfo:
         return ZoneInfo(self.TIMEZONE)
+
+
+# noinspection PyArgumentList
+settings = Settings()

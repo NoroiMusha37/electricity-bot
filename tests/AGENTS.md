@@ -17,6 +17,7 @@
 ## Local Contracts
 
 - Tests never hit the network. HTTP is mocked with `respx`.
+- `conftest.py` sets dummy `BOT_TOKEN`/`ALLOWED_USER_IDS` before anything imports `energy_bot.config` (it builds `settings` at import).
 - Test only our own logic. Every branch should be covered, but don't test library behaviour (pydantic parsing, default values), assertions that can't fail (e.g. what a validator already guarantees), or things another test already covers.
 - Time-dependent tests inject `now` explicitly (Europe/Kyiv), never the wall clock.
 

@@ -22,8 +22,9 @@ def empty_collection() -> dict:
 
 @respx.mock
 async def test_get_schedules_skips_empty_days(client):
-    respx.get(f"{SCHEDULE_API}/menus").respond(json=fixture_json("menus.json"))
+    route = respx.get(f"{SCHEDULE_API}/menus").respond(json=fixture_json("menus.json"))
     schedules = await client.get_schedules()
+    assert route.calls.last.request.url.params["jsonld"] == "1"  # otherwise LOE returns a plain list
     assert [schedule.date for schedule in schedules] == [date(2026, 10, 17)]  # Tomorrow is empty, archive ignored
     assert schedules[0].groups["5.1"][0].label == "12:00–16:00"
 

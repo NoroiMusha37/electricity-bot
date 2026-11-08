@@ -30,6 +30,15 @@ def to_blocks(schedules: Iterable[DaySchedule], group: str, tz: ZoneInfo) -> lis
     return blocks
 
 
+def known_until(schedules: Iterable[DaySchedule], group: str, tz: ZoneInfo) -> datetime | None:
+    """End of the last day whose schedule mentions the group (the midnight after it); None if no day does.
+
+    An outage block ending exactly here may continue: the next day's schedule isn't known yet.
+    """
+    last_day = max((day.date for day in schedules if group in day.groups), default=None)
+    return None if last_day is None else datetime.combine(last_day + timedelta(days=1), time(), tzinfo=tz)
+
+
 def due_warnings(
         blocks: Iterable[OutageBlock], now: datetime, offsets_minutes: Sequence[int], catchup: timedelta
 ) -> list[DueWarning]:

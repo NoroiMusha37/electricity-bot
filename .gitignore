@@ -177,3 +177,5 @@ pyrightconfig.json
 ### Project ###
 *.db
 *.db-journal
+*.db-wal
+*.db-shm
