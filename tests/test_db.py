@@ -1,27 +1,10 @@
 from datetime import date, datetime, time
 
-import pytest
-
 from energy_bot.loe.schemas import DaySchedule
-from energy_bot.storage.db import Database
-from energy_bot.storage.schemas import ActiveAccident, Subscriber
-from tests.conftest import KYIV, make_interval
+from energy_bot.storage.schemas import ActiveAccident
+from tests.conftest import KYIV, make_interval, make_subscriber
 
 NOW = datetime(2026, 11, 10, 12, 0, tzinfo=KYIV)
-
-
-@pytest.fixture
-async def db(tmp_path):
-    database = await Database.connect(str(tmp_path / "test.db"))
-    yield database
-    await database.close()
-
-
-def subscriber(chat_id: int = 1, **changes) -> Subscriber:
-    return Subscriber(
-        chat_id=chat_id, user_id=chat_id, outage_group="5.1", city_id=693, city_name="Львів", otg_name="Львівська",
-        street_id=12564, street_name="Городоцька", building="116-А", quiet_start=time(23), quiet_end=time(7),
-    ).model_copy(update=changes)
 
 
 def schedule(day: date, start: str = "17:00", end: str = "20:00") -> DaySchedule:
@@ -29,9 +12,9 @@ def schedule(day: date, start: str = "17:00", end: str = "20:00") -> DaySchedule
 
 
 async def test_subscriber_round_trip_and_update(db):
-    await db.upsert_subscriber(subscriber())
-    assert await db.get_subscriber(1) == subscriber()
-    manual = subscriber(outage_group="2.1", city_id=None, street_id=None, building=None)
+    await db.upsert_subscriber(make_subscriber())
+    assert await db.get_subscriber(1) == make_subscriber()
+    manual = make_subscriber(outage_group="2.1", city_id=None, street_id=None, building=None)
     await db.upsert_subscriber(manual)
     stored = await db.get_subscriber(1)
     assert stored == manual and not stored.has_address
@@ -39,16 +22,17 @@ async def test_subscriber_round_trip_and_update(db):
 
 
 async def test_quiet_hours_and_deactivate(db):
-    await db.upsert_subscriber(subscriber(1))
-    await db.upsert_subscriber(subscriber(2))
+    await db.upsert_subscriber(make_subscriber(1))
+    await db.upsert_subscriber(make_subscriber(2))
     await db.set_quiet_hours(1, time(22, 30), time(6), enabled=False)
     await db.deactivate(2)
     [active] = await db.active_subscribers()
-    assert (active.chat_id, active.quiet_start, active.quiet_end, active.quiet_enabled) == (1, time(22, 30), time(6), False)
+    assert active.chat_id == 1
+    assert (active.quiet_start, active.quiet_end, active.quiet_enabled) == (time(22, 30), time(6), False)
 
 
 async def test_delete_subscriber_removes_related_rows(db):
-    await db.upsert_subscriber(subscriber())
+    await db.upsert_subscriber(make_subscriber())
     await db.mark_sent(1, "warn|x|60", NOW)
     await db.save_accident(1, ActiveAccident(accident_id=7))
     await db.delete_subscriber(1)
@@ -84,6 +68,9 @@ async def test_accidents_save_update_remove(db):
     await db.remove_accident(1, 7)
     assert await db.active_accidents(1) == []
     assert len(await db.active_accidents(2)) == 1
+    await db.save_accident(2, ActiveAccident(accident_id=9))
+    await db.clear_accidents(2)
+    assert await db.active_accidents(2) == []
 
 
 async def test_prune_drops_only_old_records(db):

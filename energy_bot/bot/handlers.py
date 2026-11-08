@@ -84,6 +84,7 @@ async def _save_address(
         street_id=data["street_id"], street_name=data["street_name"], building=data["building"],
     )
     await db.upsert_subscriber(subscriber)
+    await db.clear_accidents(message.chat.id)
     await message.answer(texts.saved(subscriber))
     now = _now()
     await _send_schedule(message, subscriber, await load_schedules(db, loe, now), now)
@@ -127,6 +128,7 @@ async def set_group(message: Message, command: CommandObject, state: FSMContext,
     await state.clear()
     existing = await db.get_subscriber(message.chat.id)
     await db.upsert_subscriber(_new_subscriber(existing, message.chat.id, message.from_user.id, group))
+    await db.clear_accidents(message.chat.id)
     await message.answer(texts.saved_group_only(group))
 
 

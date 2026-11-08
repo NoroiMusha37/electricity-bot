@@ -6,7 +6,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-from energy_bot.loe.schemas import DaySchedule, Interval
+from energy_bot.loe.schemas import WEEKDAYS, DaySchedule, Interval
 from energy_bot.render import theme
 from energy_bot.schedule.timeline import to_blocks
 
@@ -36,7 +36,6 @@ PERIODS_LINE_HEIGHT = 38 * SCALE
 SWATCH, SWATCH_RADIUS, SWATCH_OUTLINE = 30 * SCALE, 8 * SCALE, 4 * SCALE
 LEGEND_TEXT_GAP, LEGEND_ITEM_GAP = 12 * SCALE, 40 * SCALE
 
-WEEKDAYS = ("пн", "вт", "ср", "чт", "пт", "сб", "нд")
 PERIODS_SEPARATOR = "  ·  "
 
 

@@ -1,10 +1,12 @@
 """All user-facing texts (Ukrainian) and their formatting."""
 
-from datetime import datetime
+from datetime import date, datetime
 
-from energy_bot.loe.schemas import City
-from energy_bot.schedule.schemas import OutageBlock
+from energy_bot.loe.schemas import WEEKDAYS, Accident, City, Interval
+from energy_bot.schedule.schemas import GroupChange, OutageBlock
 from energy_bot.storage.schemas import ActiveAccident, Subscriber
+
+ACCIDENT_ENDED = "✅ Аварійне відключення завершено."
 
 COMMANDS = {
     "schedule": "Графік на сьогодні й завтра",
@@ -125,3 +127,50 @@ def status(
     lines.append(f"Група: {subscriber.outage_group}")
     lines.append(quiet_hours(subscriber))
     return "\n".join(lines)
+
+
+def day_label(day: date, now: datetime) -> str:
+    """"сьогодні", "завтра" or "пн 10.11"."""
+    days_ahead = (day - now.date()).days
+    if days_ahead == 0:
+        return "сьогодні"
+    return "завтра" if days_ahead == 1 else f"{WEEKDAYS[day.weekday()]} {day:%d.%m}"
+
+
+def periods(intervals: list[Interval]) -> str:
+    return ", ".join(interval.label for interval in intervals) or "відключень немає"
+
+
+def schedule_published(day: date, now: datetime) -> str:
+    return f"📅 Опубліковано графік на {day_label(day, now)}."
+
+
+def schedule_changed(day: date, change: GroupChange, now: datetime) -> str:
+    return (
+        f"🔄 Графік на {day_label(day, now)} змінено.\n"
+        f"Було: {periods(change.before)}\n"
+        f"Стало: {periods(change.after)}"
+    )
+
+
+def warning(block: OutageBlock, known_end: datetime, now: datetime) -> str:
+    """Minutes are counted from `now`, so a warning sent late (catch-up) still says the truth."""
+    minutes_left = -(-(block.start - now).total_seconds() // 60)
+    return (
+        f"⏰ Через {minutes_left:.0f} хв (о {block.start:%H:%M}) вимкнення світла. "
+        f"Світло має з'явитися {_until(block.end, known_end, now)}."
+    )
+
+
+def accident_started(accident: Accident, now: datetime) -> str:
+    return f"⚠️ Аварійне відключення з {moment(accident.date_event, now)}. {_restore_time(accident, now)}"
+
+
+def accident_plan_changed(accident: Accident, now: datetime) -> str:
+    return f"🕑 Аварійне відключення: оновлено час. {_restore_time(accident, now)}"
+
+
+def _restore_time(accident: Accident, now: datetime) -> str:
+    if accident.date_plan_in is None:
+        return "Час відновлення поки невідомий."
+    return f"Орієнтовне відновлення: {moment(accident.date_plan_in, now)}."

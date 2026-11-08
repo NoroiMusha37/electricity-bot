@@ -40,7 +40,9 @@ def test_blocks_merge_touching_overlapping_and_across_midnight():
     blocks = to_blocks(
         [
             schedule(NEXT_DAY, ("00:00", "02:00"), ("10:00", "11:00")),  # days given out of order
-            schedule(DAY, ("08:00", "10:00"), ("09:00", "09:30"), ("14:00", "16:00"), ("16:00", "17:30"), ("22:00", "24:00")),
+            schedule(
+                DAY, ("08:00", "10:00"), ("09:00", "09:30"), ("14:00", "16:00"), ("16:00", "17:30"), ("22:00", "24:00")
+            ),
         ],
         "5.1",
         KYIV,

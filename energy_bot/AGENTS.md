@@ -27,7 +27,12 @@
   - `db.py`: `Database.connect(path)`; one aiosqlite connection, WAL; tables created with `CREATE TABLE IF NOT EXISTS`.
   - `schemas.py`: `Subscriber` (field `outage_group`; `has_address`), `ActiveAccident`.
   - Schedules are stored as whole `DaySchedule` JSON per date; times and datetimes as ISO strings.
-- `monitor/`: background asyncio loops: `schedule_watcher.py` (schedule diffs), `warnings.py` (60/30-min warnings), `accident_watcher.py` (emergency start/end), `notifier.py` (safe message sending).
+- `monitor/`: background jobs, each a plain `async def job(..., now)` started by `runner.run_forever` from `main.py` (`functools.partial` binds the dependencies).
+  - `schedule_watcher.check_schedules`: the **only** writer of schedule snapshots. The first run on an empty DB is silent; after that it sends "published"/"changed" photos, rendered once per group. Past days are stored but not announced. Known, accepted limitation: if a send fails, the snapshot is saved anyway, so that one "published"/"changed" notice isn't retried (warnings still use the new schedule). The fix would be per-user `sent_notifications` keys; do it only if it shows up in the logs.
+  - `outage_warnings.send_due_warnings`: 60/30-min warnings from stored snapshots; dedupe key `warn|<block start ISO>|<offset>`, marked only after delivery.
+  - `accident_watcher.check_accidents`: one LOE request per street; start / restore-time change / end; DB state changes only after delivery. Saving a new address or group clears the chat's `active_accidents` (`db.clear_accidents`), so an old address never produces a false "ended".
+  - `notifier.Notifier`: `send_text` / `send_photo` return delivery success. Silent during quiet hours, one wait on rate limit, deactivates chats that blocked the bot, never raises Telegram errors.
+  - `runner.run_forever(name, interval, job, tz)`: calls `job(datetime.now(tz))` forever; a failing run is logged, not fatal.
 - Child-owned: `loe/` (see its AGENTS.md).
 
 ## Local Contracts

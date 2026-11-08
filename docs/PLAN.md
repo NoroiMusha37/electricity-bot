@@ -46,11 +46,11 @@ energy_bot/
   render/     schedule_image.py, theme.py, fonts/ (Inter Regular+Bold .ttf + OFL.txt)
   storage/    db.py, schemas.py
   bot/        handlers.py, states.py, keyboards.py, middlewares.py, texts.py
-  monitor/    schedule_watcher.py, warnings.py, accident_watcher.py, notifier.py
+  monitor/    schedule_watcher.py, outage_warnings.py, accident_watcher.py, notifier.py, runner.py
 tests/
   fixtures/   schedule_*.html (real archived rawHtml), accidents.json, streets.json
   test_parser.py, test_timeline.py, test_db.py, test_client.py,
-  test_schedule_watcher.py, test_warnings.py, test_accident_watcher.py
+  test_schedule_watcher.py, test_outage_warnings.py, test_accident_watcher.py, test_notifier.py, test_runner.py
 deploy/       energy-bot.service, README.md, AGENTS.md
 ```
 
@@ -155,7 +155,7 @@ active_accidents(chat_id INTEGER, accident_id INTEGER, date_plan_in TEXT, PRIMAR
 | `/cancel` | leave FSM |
 
 ### `energy_bot/monitor/`
-- `notifier.py`: `Notifier.send(sub, text)` and `Notifier.send_photo(sub, png: bytes, caption)` (via `BufferedInputFile`). Both use `disable_notification=is_quiet(...)`. When one event goes to many subscribers, the image is rendered once per `(date, group)`. It retries on `TelegramRetryAfter`, deactivates the subscriber on `TelegramForbiddenError`, logs other errors, and waits 50 ms between sends.
+- `notifier.py`: `Notifier.send_text(sub, text, now)` and `Notifier.send_photo(sub, png, caption, now)` → `bool` (delivered). Silent (`disable_notification`) during enabled quiet hours. Waits once on `TelegramRetryAfter`, deactivates the subscriber on `TelegramForbiddenError`, logs other Telegram errors. No artificial delay between sends: a handful of subscribers is far below Telegram's limits. When one event goes to many subscribers, the schedule watcher renders the image once per group.
 
 - **`schedule_watcher.py`** runs every 5 min:
   1. `get_schedules()`. On error, log and skip the cycle.
@@ -166,7 +166,7 @@ active_accidents(chat_id INTEGER, accident_id INTEGER, date_plan_in TEXT, PRIMAR
   3. On the first run (empty DB), save silently.
   4. If `Today` becomes empty, nothing happens: the last snapshot is kept.
 
-- **`warnings.py`** runs every 60 s:
+- **`outage_warnings.py`** runs every 60 s ("Через N хв" is counted from the actual send time, so a late catch-up warning stays accurate):
   1. For each subscriber, build `to_blocks(recent snapshots for yesterday/today/tomorrow, outage_group)`.
   2. For each due `(block, offset)` not yet `is_sent(chat, f"warn|{block.start.isoformat()}|{offset}")`, send "⏰ Через {offset} хв (о {start}) вимкнення світла. Світло має з'явитися о {end}{' завтра' if next day}." If the block ends at `known_until` (next day unpublished): "…не раніше 00:00 (графік на завтра ще не опубліковано)."
   3. Because the key includes the block start, a schedule change that moves an outage produces fresh warnings.

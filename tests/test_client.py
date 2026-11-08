@@ -52,7 +52,10 @@ async def test_search_streets_ranks_prefix_before_substring(client):
 @respx.mock
 async def test_find_groups_tries_spellings_and_returns_loe_spelling(client):
     route = respx.get(f"{POWER_API}/pw_accounts").mock(
-        side_effect=[httpx.Response(200, json=empty_collection()), httpx.Response(200, json=fixture_json("accounts.json"))]
+        side_effect=[
+            httpx.Response(200, json=empty_collection()),
+            httpx.Response(200, json=fixture_json("accounts.json")),
+        ]
     )
     result = await client.find_groups(693, 12564, "171а")
     assert [call.request.url.params["buildingName"] for call in route.calls] == ["171-А", "171а"]

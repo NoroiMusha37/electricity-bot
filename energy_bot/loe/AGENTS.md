@@ -12,7 +12,7 @@
   - `find_groups(city_id, street_id, building) -> BuildingLookup`.
   - `get_accidents(city_id, street_id)`: first page only.
 - `schemas.py`: pydantic DTOs.
-  - Our own: `Interval`, `DaySchedule`, `BuildingLookup`, plus `format_minutes`.
+  - Our own: `Interval`, `DaySchedule`, `BuildingLookup`, plus the shared formatting helpers `format_minutes` and `WEEKDAYS` (used by both the bot texts and the renderer).
   - Read straight from LOE JSON records via field aliases and validators: `MenuItem`, `City`, `Street`, `BuildingAccount`, `Accident`.
 - `parser.py`: `parse_schedule_html(raw, tz) -> DaySchedule | None`.
 - `buildings.py`: building number normalisation (`normalize_building`, `building_variants`, `parse_building_names`, `building_matches`).

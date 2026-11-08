@@ -153,6 +153,11 @@ class Database:
         )
         await self._connection.commit()
 
+    async def clear_accidents(self, chat_id: int) -> None:
+        """Forget the chat's reported accidents, e.g. when its address changes (they belonged to the old one)."""
+        await self._connection.execute("DELETE FROM active_accidents WHERE chat_id = ?", (chat_id,))
+        await self._connection.commit()
+
     async def remove_accident(self, chat_id: int, accident_id: int) -> None:
         await self._connection.execute(
             "DELETE FROM active_accidents WHERE chat_id = ? AND accident_id = ?", (chat_id, accident_id)

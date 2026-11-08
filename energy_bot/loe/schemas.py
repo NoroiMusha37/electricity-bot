@@ -15,6 +15,7 @@ from pydantic import (
 from energy_bot.loe.buildings import parse_building_names
 
 MINUTES_PER_DAY = 24 * 60
+WEEKDAYS = ("пн", "вт", "ср", "чт", "пт", "сб", "нд")  # Ukrainian abbreviations, indexed by date.weekday()
 
 
 def _empty_if_none(value: object) -> object:
@@ -62,7 +63,7 @@ class MenuItem(BaseModel):
 
 
 class City(BaseModel):
-    model_config = ConfigDict(str_strip_whitespace=True)
+    model_config = ConfigDict(str_strip_whitespace=True, validate_by_name=True)
 
     id: int
     name: str
@@ -89,7 +90,7 @@ class Street(BaseModel):
 class BuildingAccount(BaseModel):
     """One `pw_accounts` record. Only these two fields are ever read: the rest may be personal data."""
 
-    model_config = ConfigDict(str_strip_whitespace=True)
+    model_config = ConfigDict(str_strip_whitespace=True, validate_by_name=True)
 
     building_name: EmptyIfNone = Field(default="", validation_alias="buildingName")
     group: EmptyIfNone = Field(default="", validation_alias="chergGpv")
@@ -114,7 +115,7 @@ class Accident(BaseModel):
     Validate with ``context={"tz": ZoneInfo(...)}`` so dates without an offset get local time.
     """
 
-    model_config = ConfigDict(str_strip_whitespace=True)
+    model_config = ConfigDict(str_strip_whitespace=True, validate_by_name=True)
 
     id: int
     city_id: int | None = Field(default=None, validation_alias=AliasPath("city", "id"))
